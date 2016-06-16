@@ -1,0 +1,10 @@
+
+# Node.js
+node_modules
+
+# Hexo
+db.json
+public
+
+# Reference Theme
+themes/maupassant-hexo

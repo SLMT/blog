@@ -1,0 +1,9 @@
+extends base
+
+block main
+  for post in page.posts.toArray()
+    include _partial/post-excerpt.pug
+  .page-links
+    a.left(href=page.prev_link) Prev Page
+    = page.current + " / " + page.total
+    a.right(href=page.next_link) Next Page

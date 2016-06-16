@@ -1,0 +1,169 @@
+@import url(http://fonts.googleapis.com/earlyaccess/notosanstc.css);
+
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Noto Sans TC', serif;
+}
+
+h1 {
+  @media (max-width: 560px) {
+    font-size: 30px;
+  }
+
+  @media (min-width: 560px) {
+    font-size: 40px;
+  }
+}
+
+a {
+  color: #777;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #999;
+  text-decoration: underline;
+}
+
+code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 85%;
+}
+
+#container {
+  margin: 0 10px;
+}
+
+#header {
+  border-bottom: 1px solid #AAAAAA;
+  padding: 0 0 5px 0;
+}
+
+#footer {
+  border-top: 1px solid #AAAAAA;
+  text-align: center;
+  color: #555555;
+}
+
+.title {
+  text-align: center;
+  margin: 10px;
+}
+
+.navs {
+  text-align: center;
+}
+
+.nav {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.post {
+  margin: 20px 5px;
+}
+
+.post-large-title {
+  font-size: 28px;
+}
+
+.post-title {
+  margin: 5px 0px;
+  font-size: 24px;
+  display: block;
+  font-weight: bold;
+
+  a {
+    color: inherit;
+  }
+
+  a:hover {
+    color: inherit;
+  }
+}
+
+.post-meta {
+  color: #555;
+}
+
+.post-date {
+  display: inline-block;
+  margin-right: 10px;
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+.post-cats {
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.post-cat {
+  margin: 0 5px;
+  color: inherit;
+}
+
+.post-cat:hover {
+  color: #cb6464;
+  text-decoration: underline;
+}
+
+.post-tags {
+  display: inline-block;
+}
+
+.post-tag {
+  margin: 0 0 0 5px;
+  color: inherit;
+}
+
+.post-tag:hover {
+  color: #cb6464;
+  text-decoration: underline;
+}
+
+.post-entrance {
+  text-align: right;
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.tag-cloud {
+  margin: 10px 20px;
+  padding: 20px;
+  background-color: #eee;
+
+  a {
+    margin: 5px;
+  }
+}
+
+.page-links {
+  text-align: center;
+  margin: 10px 20px;
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+
+  a {
+    text-decoration: underline;
+    color: #777;
+  }
+
+  a:hover {
+    color: #999;
+  }
+}

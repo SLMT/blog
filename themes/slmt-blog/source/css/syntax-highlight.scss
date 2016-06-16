@@ -1,0 +1,126 @@
+/*!
+ * Agate by Taufik Nurrohman <https://github.com/tovic>
+ * Modified by SLMT to fit in Hexo <https://slmt.github.io/>
+ * ----------------------------------------------------
+ *
+ * #ade5fc
+ * #a2fca2
+ * #c6b4f0
+ * #d36363
+ * #fcc28c
+ * #fc9b9b
+ * #ffa
+ * #fff
+ * #333
+ * #62c8f3
+ * #888
+ *
+ */
+
+.highlight {
+  display: block;
+  overflow-x: auto;
+  padding: 10px;
+  background: #333;
+  color: white;
+
+  span {
+    font-family: "Consolas", "Courier New";
+  }
+
+
+  // Line Numbers (by SLMT)
+  td.gutter {
+    padding-right: 10px;
+    border-right: 1px solid #aaa;
+    text-align: center;
+  }
+
+  td.code {
+    padding-left: 10px;
+  }
+
+  .name,
+  .strong {
+    font-weight: bold;
+  }
+
+  pre .code,
+  .emphasis {
+    font-style: italic;
+  }
+
+  .tag {
+    color: #62c8f3;
+  }
+
+  .variable,
+  .template-variable,
+  .selector-id,
+  .selector-class {
+    color: #ade5fc;
+  }
+
+  .string,
+  .bullet {
+    color: #a2fca2;
+  }
+
+  .type,
+  .title,
+  .section,
+  .attribute,
+  .quote,
+  .built_in,
+  .builtin-name {
+    color: #ffa;
+  }
+
+  .number,
+  .symbol,
+  .bullet {
+    color: #d36363;
+  }
+
+  .keyword,
+  .selector-tag,
+  .literal {
+    color: #fcc28c;
+  }
+
+  .comment,
+  .deletion,
+  pre .code {
+    color: #888;
+  }
+
+  .regexp,
+  .link {
+    color: #c6b4f0;
+  }
+
+  .meta {
+    color: #fc9b9b;
+  }
+
+  .deletion {
+    background-color: #fc9b9b;
+    color: #333;
+  }
+
+  .addition {
+    background-color: #a2fca2;
+    color: #333;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  a:focus,
+  a:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+}

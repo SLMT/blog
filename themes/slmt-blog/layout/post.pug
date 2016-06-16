@@ -1,0 +1,22 @@
+extends base
+
+block main
+  h1.post-large-title= page.title
+  .post-meta
+    .post-date
+      i(class="fa fa-calendar", aria-hidden="true")
+      = page.date.format("YYYY/MM/DD")
+    if page.categories.length > 0
+      .post-cats
+        i(class="fa fa-folder-open", aria-hidden="true")
+        for cat, index in page.categories.toArray()
+          if index > 0
+            | /
+          a.post-cat(href=url_for(cat.path))= cat.name
+    if page.tags.length > 0
+      .post-tags
+        i(class="fa fa-tags", aria-hidden="true")
+        for tag in page.tags.toArray()
+          a.post-tag(href=url_for(tag.path))= "#" + tag.name
+  .post-content
+    != page.content

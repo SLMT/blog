@@ -1,0 +1,32 @@
+.post
+  .post-title
+    a(href=url_for(post.path))= post.title
+  .post-meta
+    .post-date
+      i(class="fa fa-calendar", aria-hidden="true")
+      = post.date.format("YYYY/MM/DD")
+    if post.categories.length > 0
+      .post-cats
+        i(class="fa fa-folder-open", aria-hidden="true")
+        for cat, index in post.categories.toArray()
+          if index > 0
+            | /
+          a.post-cat(href=url_for(cat.path))= cat.name
+    if post.tags.length > 0
+      .post-tags
+        i(class="fa fa-tags", aria-hidden="true")
+        for tag in post.tags.toArray()
+          a.post-tag(href=url_for(tag.path))= "#" + tag.name
+  .post-excerpt
+    if post.description
+      p!= post.description
+    else if post.excerpt
+      p!= post.excerpt
+    else if post.content
+      - var br = post.content.indexOf('\n')
+      if br < 0
+        p!= post.content
+      else
+        p!= post.content.substring(0, br)
+  .post-entrance
+    a(href=url_for(post.path)) Read More

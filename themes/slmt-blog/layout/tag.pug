@@ -1,0 +1,6 @@
+extends base
+
+block main
+  h2= "Posts for tag '" + page.tag + "'"
+  for post in page.posts.toArray()
+    include _partial/post-excerpt.pug

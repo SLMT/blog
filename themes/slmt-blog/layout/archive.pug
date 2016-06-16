@@ -1,0 +1,10 @@
+extends base
+
+block main
+  .categories
+    h2 Categories
+    != list_categories({show_count: false})
+  .tags
+    h2 Tags
+    .tag-cloud
+      != tagcloud({min_font: 15, max_font: 15, amount: 100, orderby: "count"})
