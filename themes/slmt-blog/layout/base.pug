@@ -3,12 +3,28 @@ html(lang="zh-TW")
   head
     meta(charset="utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= config.title
+    if page.title
+      title= config.title + " | " + page.title
+    else
+      title= config.title
     link(rel="stylesheet", href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css")
     link(rel="stylesheet", href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css")
     link(rel="stylesheet", type="text/css", href=url_for(theme.css) + "/style.css")
     link(rel="stylesheet", type="text/css", href=url_for(theme.css) + "/syntax-highlight.css")
     script(src="https://use.fontawesome.com/0bc11e7eba.js")
+
+    // Open Graph Protocol
+    if page.title
+      meta(property="og:title" content=page.title)
+    if page.date
+      meta(property="og:type" content="article:" + page.date.format("YYYY-MM-DD"))
+    else
+      meta(property="og:type" content="article")
+    meta(property="og:url" content=url_for(page.path))
+    meta(property="og:site_name" content="SLMT's Blog")
+    meta(property="og:locale" content="zh-TW")
+    if page.excerpt
+      meta(property="og:description" content=page.excerpt)
 
   body
     #container
