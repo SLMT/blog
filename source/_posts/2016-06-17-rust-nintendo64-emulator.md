@@ -11,6 +11,8 @@ tags: [rust, programming, emulator]
 
 其中我看到了一個很有趣的 project。就是一位叫做 ferris 的網友，在 Twitch 上實況用 Rust 撰寫一個任天堂64 的模擬器。
 
+<!--more-->
+
 一直以來我都沒有真正看過模擬器裡面的程式碼，而且我也沒有看過一個大型 Rust Project 的撰寫過程，因此對這個 project 就備感興趣。
 
 目前最新才到 11 集，雖然我看了一集多還沒看到它載入第一個 instruction，不過目前為止讓我複習不少 Rust 語法，而且也學到了關於模擬器的一些基本知識。也許未來我也可以實況寫一個 Game Boy XD (寫任天堂64看起來很累)
