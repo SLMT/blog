@@ -20,3 +20,4 @@ block main
           a.post-tag(href=url_for(tag.path))= "#" + tag.name
   .post-content
     != page.content
+  include _partial/comments.pug

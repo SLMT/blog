@@ -1,5 +1,8 @@
 # Static files
 css: css
 
+# Comment System
+disqus: slmtsblog
+
 # Theme version
 version: 0.1.0
