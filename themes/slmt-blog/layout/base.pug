@@ -16,15 +16,13 @@ html(lang="zh-TW")
     // Open Graph Protocol
     if page.title
       meta(property="og:title" content=page.title)
-    if page.date
-      meta(property="og:type" content="article:" + page.date.format("YYYY-MM-DD"))
-    else
-      meta(property="og:type" content="article")
+    meta(property="og:image" content="http://www.slmt.tw/images/logo.png")
+    meta(property="og:type" content="website")
     meta(property="og:url" content=url_for(page.path))
     meta(property="og:site_name" content="SLMT's Blog")
     meta(property="og:locale" content="zh-TW")
     if page.excerpt
-      meta(property="og:description" content=page.excerpt)
+      meta(property="og:description" content=strip_html(page.excerpt))
 
   body
     #container
