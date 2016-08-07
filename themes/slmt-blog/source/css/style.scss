@@ -1,7 +1,8 @@
 body {
   max-width: 800px;
   margin: 0 auto;
-  font-family: '微軟正黑體', serif;
+  // TODO: Wait for better font
+  //font-family: '微軟正黑體', serif;
 }
 
 h1 {
@@ -12,6 +13,10 @@ h1 {
   @media (min-width: 560px) {
     font-size: 40px;
   }
+}
+
+p, li {
+  line-height: 160%;
 }
 
 a {
@@ -32,8 +37,15 @@ code {
   background-color: rgba(0, 0, 0, 0.05);
   padding: 2px 7px;
   border-radius: 3px;
-  font-family: inherit;
+  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier;
   font-size: 85%;
+}
+
+blockquote {
+  color: #777;
+  background-color: #EEE;
+  margin: 0px;
+  padding: 1px 20px;
 }
 
 #container {
@@ -126,7 +138,7 @@ code {
 }
 
 .post-tag {
-  margin: 0 0 0 5px;
+  margin: 0 0 0 7px;
   color: inherit;
 }
 
