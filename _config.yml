@@ -12,8 +12,8 @@ timezone: Asia/Taipei
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://www.slmt.tw
-root: /
+url: http://www.slmt.tw/blog
+root: /blog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
