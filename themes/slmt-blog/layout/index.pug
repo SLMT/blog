@@ -4,6 +4,19 @@ block main
   for post in page.posts.toArray()
     include _partial/post-excerpt.pug
   .page-links
-    a.left(href=page.prev_link) Prev Page
+    // Previous page
+    if page.prev == 1
+      a.left(href=url_for("")) Prev Page
+    else if page.prev > 1
+      a.left(href=url_for("page/" + page.prev)) Prev Page
+    else
+      span.left Prev Page
+
+    // Page number
     = page.current + " / " + page.total
-    a.right(href=page.next_link) Next Page
+
+    // Next page
+    if page.next > 0
+      a.right(href=url_for("page/" + page.next)) Next Page
+    else
+      span.right Next Page
