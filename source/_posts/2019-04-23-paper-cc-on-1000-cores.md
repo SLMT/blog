@@ -1,5 +1,5 @@
 ---
-title: "論文分享 - Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores"
+title: "論文筆記 - Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores"
 date: 2019-04-23 18:14:59
 categories: [Research, Paper]
 tags: [paper, dbms, concurrency-control, survey]
