@@ -24,7 +24,7 @@ html(lang="zh-TW")
     // Open Graph Protocol
     if page.title
       meta(property="og:title" content=page.title)
-    meta(property="og:image" content="https://www.slmt.tw/images/logo.png")
+    meta(property="og:image" content=config.url + "/images/logo.png")
     meta(property="og:type" content="website")
     meta(property="og:url" content=url_for(page.path))
     meta(property="og:site_name" content="SLMT's Blog")

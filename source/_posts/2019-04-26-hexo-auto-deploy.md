@@ -7,6 +7,8 @@ tags: [hexo, blog, deploy, travis-ci]
 
 最近將我的部落格改成使用 [Travis CI][1] 來自動發布，幫我省去在自己電腦上編譯再上傳到 Github Pages 的麻煩。 因此我將我的作法寫下來，幫助其他用 Hexo 建立 Blog 的人來設定自動發布。
 
+<!--more-->
+
 ## 概念
 
 這邊使用的方式是讓 Travis CI 來幫我們自動產生網頁，並將產生後的網頁自動上傳到 Github Pages 的做法。
