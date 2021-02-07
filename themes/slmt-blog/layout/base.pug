@@ -31,6 +31,8 @@ html(lang="zh-TW")
     meta(property="og:locale" content="zh-TW")
     if page.excerpt
       meta(property="og:description" content=strip_html(page.excerpt))
+    if page.mathjax
+      include _partial/mathjax.pug
 
   body
     #container
@@ -48,4 +50,4 @@ html(lang="zh-TW")
       #main
         block main
       #footer
-        p &copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2019
+        p &copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021
