@@ -1,0 +1,152 @@
+@charset "UTF-8";
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 18px;
+  font-family: '微軟正黑體', serif; }
+
+@media (max-width: 560px) {
+  h1 {
+    font-size: 30px; } }
+
+@media (min-width: 560px) {
+  h1 {
+    font-size: 40px; } }
+
+h2 {
+  margin-top: 40px; }
+
+h3 {
+  margin-top: 35px; }
+
+h4 {
+  margin-top: 30px; }
+
+p, li {
+  line-height: 160%; }
+
+a {
+  color: #777;
+  text-decoration: none; }
+
+a:hover {
+  color: #999;
+  text-decoration: underline; }
+
+img {
+  display: block;
+  width: 90%;
+  margin: 20px auto; }
+
+code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier;
+  font-size: 85%; }
+
+blockquote {
+  color: #777;
+  background-color: #EEE;
+  margin: 0px;
+  padding: 1px 20px; }
+
+#container {
+  margin: 0 10px; }
+
+#header {
+  border-bottom: 1px solid #AAAAAA;
+  padding: 0 0 5px 0; }
+
+#disqus_thread {
+  margin-top: 50px;
+  margin-bottom: 30px; }
+
+#footer {
+  border-top: 1px solid #AAAAAA;
+  text-align: center;
+  color: #555555; }
+
+.title {
+  text-align: center;
+  margin: 10px; }
+
+.navs {
+  text-align: center; }
+
+.nav {
+  font-size: 20px;
+  margin: 10px 0; }
+
+.post {
+  margin: 30px 5px; }
+
+.post-large-title {
+  font-size: 28px; }
+
+.post-title {
+  margin: 5px 0px;
+  font-size: 24px;
+  display: block;
+  font-weight: bold; }
+  .post-title a {
+    color: inherit; }
+  .post-title a:hover {
+    color: inherit; }
+
+.post-meta {
+  color: #555; }
+
+.post-date {
+  display: inline-block;
+  margin-right: 10px; }
+  .post-date i {
+    margin-right: 5px; }
+
+.post-cats {
+  margin-right: 10px;
+  display: inline-block; }
+
+.post-cat {
+  margin: 0 5px;
+  color: inherit; }
+
+.post-cat:hover {
+  color: #cb6464;
+  text-decoration: underline; }
+
+.post-tags {
+  display: inline-block; }
+
+.post-tag {
+  margin: 0 0 0 7px;
+  color: inherit; }
+
+.post-tag:hover {
+  color: #cb6464;
+  text-decoration: underline; }
+
+.post-entrance {
+  text-align: right; }
+  .post-entrance a {
+    text-decoration: underline; }
+
+.tag-cloud {
+  margin: 10px 20px;
+  padding: 20px;
+  background-color: #eee; }
+  .tag-cloud a {
+    margin: 5px; }
+
+.page-links {
+  text-align: center;
+  margin: 10px 20px; }
+  .page-links .left {
+    float: left; }
+  .page-links .right {
+    float: right; }
+  .page-links a {
+    text-decoration: underline;
+    color: #777; }
+  .page-links a:hover {
+    color: #999; }

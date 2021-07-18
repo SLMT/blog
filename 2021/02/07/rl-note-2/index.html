@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="zh-TW"><head><!-- Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-103835191-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-103835191-1');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SLMT's Blog | Reinforcement Learning 筆記 (2) - Value Iteration &amp; Policy Iteration</title><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/blog/css/style.css"><link rel="stylesheet" type="text/css" href="/blog/css/syntax-highlight.css"><script src="https://use.fontawesome.com/0bc11e7eba.js"></script><!-- Open Graph Protocol--><meta property="og:title" content="Reinforcement Learning 筆記 (2) - Value Iteration &amp; Policy Iteration"><meta property="og:image" content="http://www.slmt.tw/blog/images/logo.png"><meta property="og:type" content="website"><meta property="og:url" content="/blog/2021/02/07/rl-note-2/"><meta property="og:site_name" content="SLMT's Blog"><meta property="og:locale" content="zh-TW"><meta property="og:description" content="上一篇說明了 Reinforcement Learning (簡稱 RL) 的目標，以及 RL 通常會假設問題符合 Markov Decision Process (簡稱 MDP) 的特性，這篇則說明如何在 MDP 的假設下找出最佳的 policy。"><script type="text/javascript">MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};</script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/blog/rss.xml" title="SLMT's Blog" type="application/atom+xml">
+</head><body><div id="container"><div id="header"><h1 class="title">SLMT's Blog</h1><div class="pure-g navs"><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/.">All Posts</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/archives">Archive</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="https://www.slmt.tw/">About</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/rss.xml">RSS</a></div></div></div><div id="main"><h1 class="post-large-title">Reinforcement Learning 筆記 (2) - Value Iteration &amp; Policy Iteration</h1><div class="post-meta"><div class="post-date"><i class="fa fa-calendar" aria-hidden="true"></i>2021/02/07</div><div class="post-cats"><i class="fa fa-folder-open" aria-hidden="true"></i><a class="post-cat" href="/blog/categories/reinforcement-learning/">Reinforcement Learning</a></div><div class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a class="post-tag" href="/blog/tags/note/">#note</a><a class="post-tag" href="/blog/tags/reinforcement-learning/">#reinforcement learning</a><a class="post-tag" href="/blog/tags/value-iteration/">#value iteration</a><a class="post-tag" href="/blog/tags/policy-iteration/">#policy iteration</a></div></div><div class="post-content"><p>上一篇說明了 Reinforcement Learning (簡稱 RL) 的目標，以及 RL 通常會假設問題符合 Markov Decision Process (簡稱 MDP) 的特性，這篇則說明如何在 MDP 的假設下找出最佳的 policy。</p>
+<a id="more"></a>
+
+<h2 id="解法一：Value-Iteration"><a href="#解法一：Value-Iteration" class="headerlink" title="解法一：Value Iteration"></a>解法一：Value Iteration</h2><h3 id="主要概念"><a href="#主要概念" class="headerlink" title="主要概念"></a>主要概念</h3><p>首先想辦法計算出每個 state 出發能得到的最佳總報酬 (total reward)，將之記錄起來。接著再找出每個 state 上做哪個 action 得到的 total reward 最高。如此一來就能知道在每個 state 時該做甚麼 action，這就是最佳的 policy。</p>
+<h3 id="概念說明與推導-假設最大走-H-步"><a href="#概念說明與推導-假設最大走-H-步" class="headerlink" title="概念說明與推導 (假設最大走 H 步)"></a>概念說明與推導 (假設最大走 H 步)</h3><p>首先我們先定義從一個 state $s$ 出發之後，依照一個 policy $\pi$ 走 $h$ 步能夠拿到的 total reward：</p>
+<p>$$<br>V_\pi^{(h)}(s) = E_{s^{(1)},…,s^{(h)}}(\sum^h_{t=0}\gamma^t R(s^{(t)}, \pi(s^{(t)}), s^{(t+1)}) | s^{(0)} = s;\pi)<br>$$</p>
+<p>這個式子跟第一份筆記最後的式子基本上是一樣的，只是我們多指定 initial state 為 $s$。而這個式子我們稱作 <strong>Value Function</strong>。Value 的意思就是預期的 total reward。</p>
+<p>Value Iteration 的第一個目標是找出給從一個 state $s$ 出發，能夠得到的最佳 total reward：</p>
+<p>$$<br>V^{*(h)}(s) = \max_\pi E_{s^{(1)},…,s^{(h)}}(\sum^h_{t=0}\gamma^t R(s^{(t)}, \pi(s^{(t)}), s^{(t+1)}) | s^{(0)} = s;\pi)<br>$$</p>
+<p>此式子叫做 <strong>Optimal Value Function</strong>。</p>
+<p>而所謂的最佳 policy (標記為 $\pi^*$) 其實就是在每一個 state $s$ 選擇一個會帶來最大 total reward 的 action $a$，也就是可以寫成下列式子：</p>
+<p>$$<br>\pi^*(s) = \arg \max_a \sum_{s’} P(s’|s;a) [R(s,a,s’) + \gamma V^{*(H-1)}(s’)]<br>$$</p>
+<p>注意上面這個式子假設我們已經知道了每一個 state 出發走 $H-1$ 步之後的 total reward。所以為了要能夠解出上述式子，我們必須要先知道 $V^{*(H-1)}(s’)$ 是多少。也就是要先算出下面式子：</p>
+<p>$$<br>V^{*(H-1)}(s’) = \max_a \sum_{s’&#39;} P(s’&#39;|s’;a) [R(s’,a,s’&#39;) + \gamma V^{*(H-2)}(s’&#39;)]<br>$$</p>
+<p>看到這邊應該有點感覺了，可以發現要解出每一個步的最佳 total reward 要先得到上一步的最佳 total reward，直到第 0 步為止。這其實符合 dynamic programming 的概念：「一個問題的 optimal solution 可以從他的子問題的 optimal solution 得到」。因此 optimal value function 可以使用 dynamic programming 來計算。</p>
+<h3 id="Algorithm-假設最大走-H-步"><a href="#Algorithm-假設最大走-H-步" class="headerlink" title="Algorithm (假設最大走 H 步)"></a>Algorithm (假設最大走 H 步)</h3><p><img src="value-algo-finite.png" alt="Value Iteration (finite)"></p>
+<p style='text-align: center'>圖一、Value Iteration 的 Pseudo Code</p>
+
+<p>圖一展示了 Value Iteration 的實作方式，大致分成兩塊，第一塊建立一個 mapping，該 mapping 告訴我們一個 state 出發走 $H-1$ 步最佳的 total reward 是多少。建立的方式就是我先算第一步每一個 state 的 total reward 會是多少，然後再算第二步，再算第三步…直到算到第 $H-1$ 步為止，也就是 dynamic programming。第二塊則是建立在這個基礎上找出最佳的 policy，也就是每個 state 該做甚麼動作。</p>
+<h3 id="推導-無限步數"><a href="#推導-無限步數" class="headerlink" title="推導 (無限步數)"></a>推導 (無限步數)</h3><p>接下來來考慮 $H \rightarrow \infty$ 的情況。</p>
+<p>若我們不限制步數，也就是可以走無限步的話，optimal value function 就變成：</p>
+<p>$$<br>V^{*}(s) = \max_a \sum_{s’} P(s’|s;a) [R(s,a,s’) + \gamma V^{*}(s’)]<br>$$</p>
+<p>這個式子跟有限步數的式子基本相同，只差在計算時不需要考慮走幾步。因為每一個 state 出發的最佳 total reward (或稱為 optimal value) 在走了無限步之後都會收斂到一個值 (這個應該還算直覺，因為有 discount factor $\gamma$ 的存在)。這個遞迴的式子太有名，所以有個名字：<strong>Bellman Optimality Equation</strong>。</p>
+<p>在無限步的情況下找 policy 的方法仍相同，就是對每個 state 找可以得到 optimal value 的 action。</p>
+<p>不過此時得到的 policy 就有幾個特性：</p>
+<ul>
+<li>Stationary：每個 state 的最佳 action 不隨時間改變。</li>
+<li>Memoryless：每個 state 的最佳 action 跟起始狀態 $s^{(0)}$ 無關。</li>
+</ul>
+<h3 id="Algorithm-無限步數"><a href="#Algorithm-無限步數" class="headerlink" title="Algorithm (無限步數)"></a>Algorithm (無限步數)</h3><p><img src="value-algo-infinite.png" alt="Value Iteration (infinite)"></p>
+<p style='text-align: center'>圖二、Value Iteration (無限步數) 的 Pseudo Code</p>
+
+<p>這個 algorithm 跟前一個最主要的不同就在於，他把 H 步的 for loop 用一個無限 loop 替代，直到 optimal value 沒有變化為止。</p>
+<p>仔細想想可以發現好像很難說這個方法會收斂，不過事實上可以用數學證明會收斂，因此這邊就不探討。</p>
+<h2 id="解法二：Policy-Iteration"><a href="#解法二：Policy-Iteration" class="headerlink" title="解法二：Policy Iteration"></a>解法二：Policy Iteration</h2><h3 id="主要概念-1"><a href="#主要概念-1" class="headerlink" title="主要概念"></a>主要概念</h3><p>先隨便亂用一個 policy (以 2D 迷宮來說就是設定全部往右走之類的) 試試看，然後根據得到的 reward 來改進 policy 以增加預期獲得的 total reward。再重複拿新的 policy 嘗試並改進 policy。直到 policy 沒有改變為止。</p>
+<p>這種做法比較像是人類找最佳策略的做法。</p>
+<h3 id="概念說明與推導"><a href="#概念說明與推導" class="headerlink" title="概念說明與推導"></a>概念說明與推導</h3><p>因為 policy iteration 的概念是要一直不斷嘗試直到 converge，因此就不考慮有限步數 $H$ 的情況。</p>
+<p>首先我們知道給定一個 policy $\pi$，可以得到的預期總報酬 (expected total reward，或叫做 value) 可以用 value function 表示：</p>
+<p>$$<br>V_\pi(s) = E_{s^{(1)},…}(\sum^\infty_{t=0}\gamma^t R(s^{(t)}, \pi(s^{(t)}), s^{(t+1)}) | s^{(0)} = s;\pi)<br>$$</p>
+<p>那我們要怎麼找到最好的 policy 呢？</p>
+<p>這要分成兩個步驟：</p>
+<ol>
+<li>先找出該 policy 可以得到的預期總報酬是多少</li>
+<li>改進 policy 以提高預期總報酬</li>
+</ol>
+<p>首先 value function 的式子 $V_\pi(s)$ 也跟 Value Iteration 無限步數的情況相同，可以寫成遞迴形式：</p>
+<p>$$<br>V_\pi(s) = \sum_{s’} P(s’|s;\pi(s)) [R(s,\pi(s),s’) + \gamma V_\pi(s’)]<br>$$</p>
+<p>這個式子也非常有名，叫做 <strong>Bellman Expectation Equation</strong>。這個式子跟 Bellman Optimality Equation 有兩個差異：</p>
+<ul>
+<li>Policy $\pi$ 已經指定</li>
+<li>沒有 $\max$</li>
+</ul>
+<p>知道這個遞迴式之後，有兩種方式可以解這個式子：</p>
+<ol>
+<li>解聯立方程式：因為這個式子只有 $V_\pi(s)$ 是未知的，而 $V_\pi(s)$ 的值有 $|\mathbb{S}|$ 種，然後式子剛好也有 $|\mathbb{S}|$ 個，所以可以解聯立方程式。時間複雜度 $|\mathbb{S}|^3$。</li>
+<li>跟 Value Iteration 一樣，用 DP 跑到收斂為止。</li>
+</ol>
+<p>Policy Iteration 採用的就是第二種解法，因為實際上跑比較快。</p>
+<p>那現在完成第一個步驟，也就是找出一個 policy 的預期總報酬之後，要如何改進 policy 呢？只要根據以下的式子更新 policy 就好：</p>
+<p>$$<br>\hat\pi(s) = \arg\max_a\sum_{s’} P(s’|s;a) [R(s,a,s’) + \gamma V_\pi(s’)]<br>$$</p>
+<p>講白話點就是，假設我們在 state $s$，因為我們知道每一個 action 之後到達的下一個 state $s’$ 持續用原本的 policy $\pi$ 的預期總報酬，所以我們就可以依此挑選一個帶來最大總報酬的 action $a$，並把這個新的策略記為 $\hat\pi(s)$。</p>
+<p>這個式子可以經由數學證明每次計算都可以得到更好或是至少不會變爛的 policy，證明的部分就省略。</p>
+<h3 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h3><p><img src="policy-algo.png" alt="Policy Iteration"></p>
+<p style='text-align: center'>圖三、Policy Iteration 的 Pseudo Code</p>
+
+<p>圖三展示了上述概念的實作方式。</p>
+<h2 id="這兩種做法的不足之處"><a href="#這兩種做法的不足之處" class="headerlink" title="這兩種做法的不足之處"></a>這兩種做法的不足之處</h2><p>然而，現實世界並不如大家所想的容易。</p>
+<p>實際上我們很難得知 $P(s’|s;a)$ 到底是多少，像是吃角子老虎機不會告訴你拉一次轉換到中獎的機率有多少。</p>
+<p>因此下一份筆記將會解釋如何在不知道 $P(s’|s;a)$ 的情況下找最佳 policy，也就是所謂的 Model-free RL。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p>以上筆記為我看清華大學資訊工程學系的吳尚鴻教授的 CS565600 深度學習課程第 16 課，再轉化成我的理解記錄下來，有興趣的人可以直接看課程：</p>
+<p><a target="_blank" rel="noopener" href="https://nthu-datalab.github.io/ml/">https://nthu-datalab.github.io/ml/</a></p>
+</div><div id="disqus_thread"><script>var disqus_shortname = 'slmtsblog';
+var disqus_identifier = '2021/02/07/rl-note-2/';
+var disqus_title = 'Reinforcement Learning 筆記 (2) - Value Iteration &amp; Policy Iteration';
+var disqus_url = 'http://www.slmt.tw/blog/2021/02/07/rl-note-2/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//#{theme.disqus}.disqus.com/count.js" async></script></div></div><div id="footer"><p>&copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021</p></div></div></body></html>

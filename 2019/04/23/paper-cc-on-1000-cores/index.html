@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="zh-TW"><head><!-- Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-103835191-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-103835191-1');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SLMT's Blog | 論文筆記 - Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores</title><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/blog/css/style.css"><link rel="stylesheet" type="text/css" href="/blog/css/syntax-highlight.css"><script src="https://use.fontawesome.com/0bc11e7eba.js"></script><!-- Open Graph Protocol--><meta property="og:title" content="論文筆記 - Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores"><meta property="og:image" content="http://www.slmt.tw/blog/images/logo.png"><meta property="og:type" content="website"><meta property="og:url" content="/blog/2019/04/23/paper-cc-on-1000-cores/"><meta property="og:site_name" content="SLMT's Blog"><meta property="og:locale" content="zh-TW"><meta property="og:description" content="近期開啟的新系列，以分享資料庫系統相關的論文並簡介內容為主，不會講得太深入，但是會需要些對資料庫系統內部運作原理的基本概念。
+這篇論文 [1] 主要是把近期常被拿來討論幾個主要的 Concurrency Control 的分支，放在具備 1000 個 Core 的環境下進行測試。 目的是為了瞭解這些做法在 Core 數量極多的機器上的 Scalability 如何。 在研究過程中，他們也嘗試去優化這些方法，盡可能地避免實作上可能會造成的瓶頸。 所以這篇論文的研究也可以當作在 multi-thread 環境下，實作這些 CC 作法的參考。"><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/blog/rss.xml" title="SLMT's Blog" type="application/atom+xml">
+</head><body><div id="container"><div id="header"><h1 class="title">SLMT's Blog</h1><div class="pure-g navs"><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/.">All Posts</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/archives">Archive</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="https://www.slmt.tw/">About</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/rss.xml">RSS</a></div></div></div><div id="main"><h1 class="post-large-title">論文筆記 - Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores</h1><div class="post-meta"><div class="post-date"><i class="fa fa-calendar" aria-hidden="true"></i>2019/04/23</div><div class="post-cats"><i class="fa fa-folder-open" aria-hidden="true"></i><a class="post-cat" href="/blog/categories/research/">Research</a>/<a class="post-cat" href="/blog/categories/research/paper/">Paper</a></div><div class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a class="post-tag" href="/blog/tags/paper/">#paper</a><a class="post-tag" href="/blog/tags/dbms/">#dbms</a><a class="post-tag" href="/blog/tags/concurrency-control/">#concurrency-control</a><a class="post-tag" href="/blog/tags/survey/">#survey</a></div></div><div class="post-content"><p>近期開啟的新系列，以分享資料庫系統相關的論文並簡介內容為主，不會講得太深入，但是會需要些對資料庫系統內部運作原理的基本概念。</p>
+<p>這篇論文 [1] 主要是把近期常被拿來討論幾個主要的 Concurrency Control 的分支，放在具備 1000 個 Core 的環境下進行測試。 目的是為了瞭解這些做法在 Core 數量極多的機器上的 Scalability 如何。 在研究過程中，他們也嘗試去優化這些方法，盡可能地避免實作上可能會造成的瓶頸。 所以這篇論文的研究也可以當作在 multi-thread 環境下，實作這些 CC 作法的參考。</p>
+<a id="more"></a>
+
+<h2 id="基本資料"><a href="#基本資料" class="headerlink" title="基本資料"></a>基本資料</h2><ul>
+<li>論文作者群：Xiangyao Yu, George Bezerra, Andrew Pavlo, Srinivas Devadas, Michael Stonebraker</li>
+<li>研究機構：MIT, CMU</li>
+<li>發表會議/期刊：Very Large Database (VLDB) 2014 年期刊</li>
+</ul>
+<h2 id="需要具備的知識"><a href="#需要具備的知識" class="headerlink" title="需要具備的知識"></a>需要具備的知識</h2><ul>
+<li>知道 Transaciton 是甚麼</li>
+<li>了解 Concurrency Control 的目的</li>
+<li>對 multi-threads programming 有基本認識</li>
+</ul>
+<h2 id="做為測試目標的-Concurrency-Control-作法"><a href="#做為測試目標的-Concurrency-Control-作法" class="headerlink" title="做為測試目標的 Concurrency Control 作法"></a>做為測試目標的 Concurrency Control 作法</h2><p>簡單介紹一下這篇論文所探討的主流 Concurrency Control 作法。</p>
+<h3 id="Two-Phase-Locking-2PL"><a href="#Two-Phase-Locking-2PL" class="headerlink" title="Two Phase Locking (2PL)"></a>Two Phase Locking (2PL)</h3><p>最傳統且常見的 Concurrency Control 作法。 基本概念是在 Transaction (以下簡稱 Tx) 取得資料之前先把資料鎖住，防止其他 Tx 存取。 一般又會依照讀寫的狀況分成 shared lock (slock) 跟 exclusive lock (xlock)。 一旦 Tx 開始放棄 lock 就不能再 lock 資料，以確保資料能夠正確的 recovery。</p>
+<p>其中這篇論文又依照處理 deadlock 的方式分成以下三種作法：</p>
+<h4 id="DL-DETECT"><a href="#DL-DETECT" class="headerlink" title="DL_DETECT"></a>DL_DETECT</h4><p>不會預先防範 deadlock 的發生，但是發生的話可以藉由建立一個 wait-for graph 來找出發生的地方，並且會把其中一個卡住的 Tx abort 來解除 deadlock。</p>
+<h4 id="NO-WAIT"><a href="#NO-WAIT" class="headerlink" title="NO_WAIT"></a>NO_WAIT</h4><p>只要 Tx 存取資料的時候，發現可能需要等待其他 Tx 釋放 lock，就會自動 abort。</p>
+<h4 id="WIAT-DIE"><a href="#WIAT-DIE" class="headerlink" title="WIAT_DIE"></a>WIAT_DIE</h4><p>Tx A 存取資料時，如果發現資料被鎖住的話，依照下列情況做處理：</p>
+<ul>
+<li>如果 Tx A 比鎖住資料的 Tx B 年輕 =&gt; abort Tx A</li>
+<li>如果 Tx A 比鎖住資料的 Tx B 老 =&gt; 等待 Tx B 釋放 lock</li>
+</ul>
+<p>這個方法確保不會有 deadlock 發生，因為一個 deadlock 互相等待的關係之中，一定有一個 Tx 比較年輕，因此只要讓其中一邊沒機會等待就可以避免 deadlock。</p>
+<p>這個方法成本比 DL_DETECT 低很多，又不會亂 abort Tx，所以是最常見的作法。</p>
+<h3 id="Timestamp-Ordering-T-O"><a href="#Timestamp-Ordering-T-O" class="headerlink" title="Timestamp Ordering (T/O)"></a>Timestamp Ordering (T/O)</h3><p>Timestamp ordering 的基本概念是 DBMS 會為每個 Tx 配發一個 timestamp (以下簡稱 ts)，這個 ts 會作為判斷 Tx 順序的標準。 除此之外，Tx 一般會將自己的 ts 寫在自己寫入過的資料上面，用來給後面存取的 Tx 辨識。</p>
+<h4 id="Basic-T-O"><a href="#Basic-T-O" class="headerlink" title="Basic T/O"></a>Basic T/O</h4><p>Tx 會檢查資料上的 ts，若上面的 ts 比自己的 ts 還要年輕，就會 abort。 反之，照常寫入資料。</p>
+<h4 id="Multi-version-Concurrency-Control-MVCC"><a href="#Multi-version-Concurrency-Control-MVCC" class="headerlink" title="Multi-version Concurrency Control (MVCC)"></a>Multi-version Concurrency Control (MVCC)</h4><p>每次 Tx 寫入資料的時候，直接創造一個新的版本另外儲存，原本的版本就保留不動。 好處是如果有其他人正在讀同樣的資料，就不會被寫入影響到 (reads do not block writes)。</p>
+<h4 id="Optimistic-Concurrency-Control-OCC"><a href="#Optimistic-Concurrency-Control-OCC" class="headerlink" title="Optimistic Concurrency Control (OCC)"></a>Optimistic Concurrency Control (OCC)</h4><p>Tx 在執行期間不做任何檢查，讀取任何想讀的資料，寫的時候先寫在一個獨立的空間。 最後 Tx 要 commit 時檢查之前的讀寫是否會跟人家衝突 (conflict)。 沒問題的話就把先前寫入的東西寫到共用的空間。 有問題就 abort Tx。 一種先斬後奏的作法。</p>
+<h4 id="H-STORE"><a href="#H-STORE" class="headerlink" title="H-STORE"></a>H-STORE</h4><p>H-Store [2] 這種系統專用的作法。 先將資料切割成多個分區 (partition)，然後每個分區交給一個 core 處理，並且每個分區一次只允許一個 thread 執行。 因此在一個分區內不需要處理 Concurrency Control。 若有 Tx 想要跨分區存取，就必須要先把這些分區全部鎖住。</p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
+<li>需要實作各種 CC 方法</li>
+<li>需要盡可能地避免實作上的瓶頸</li>
+</ul>
+<h2 id="有用的發現"><a href="#有用的發現" class="headerlink" title="有用的發現"></a>有用的發現</h2><h3 id="主要的瓶頸來源"><a href="#主要的瓶頸來源" class="headerlink" title="主要的瓶頸來源"></a>主要的瓶頸來源</h3><ul>
+<li>Memory Allocation：很多時間會浪費在等 malloc 分配記憶體。解決方法是使用 previous work (TCMalloc [3], jemalloc [4]) 來為每個 thread 建立 memory pool，減少分配的 cost。</li>
+<li>Lock Table: 避免使用 centrolized lock table，而是將 lock 儲存在各個 tuple 中，但是可能需要耗費額外記憶體。</li>
+<li>Mutex: Mutex 是一個很昂貴的動作，造成 CPU 需要做多次 message passing。2PL 主要出現在 Deadlock detection，Timestamp-based 出現在 centrolized timestamp allocator。</li>
+</ul>
+<h3 id="實作-Scalable-2PL-的技巧"><a href="#實作-Scalable-2PL-的技巧" class="headerlink" title="實作 Scalable 2PL 的技巧"></a>實作 Scalable 2PL 的技巧</h3><ul>
+<li>實作 lock-free deadlock detection 方法： 每個 Tx 只將等待的目標存在自己的 queue 中，detector 會看過所有 queue 來尋找 partial wait-for graph。</li>
+<li>讓等太久的 Tx abort： 原本 Tx 等待 lock 時，會等到 lock 被釋放才回復執行。 根據實驗結果顯示，若能適度讓等太久的 Tx abort，可以減少 wait chaining 的狀況，因此反而可以增加 throughput。 實驗結果顯示等待上限設為 100us 差不多。</li>
+</ul>
+<h3 id="實作-Scalable-Timestamp-based-CC-的技巧"><a href="#實作-Scalable-Timestamp-based-CC-的技巧" class="headerlink" title="實作 Scalable Timestamp-based CC 的技巧"></a>實作 Scalable Timestamp-based CC 的技巧</h3><h4 id="分配-Timestamp"><a href="#分配-Timestamp" class="headerlink" title="分配 Timestamp"></a>分配 Timestamp</h4><p>分配 timestamp 必須是一個 centralized 的架構，以確保 timestamp 的順序性，但是也造成了效能瓶頸。這邊有四種解法：</p>
+<ul>
+<li>使用 Atomic Addition 指令。</li>
+<li>使用 Atomic Addition 指令，一次取得大量 timestamps (batching)。</li>
+<li>讓 timestamp 使用 core 的 local clock 加上 thread id 組成。這個方法需要 core 之間 synchronize clocks，用軟體實作會非常昂貴。目前只有 Intel 提供硬體支援。</li>
+<li>用 hardware counter 來產生 timestamp，目前尚未有 CPU 提供支援。</li>
+</ul>
+<p>Clock 的作法在所有實驗上取得最佳效果，但是在 high-contention 的實驗中，單純使用無 batch 的 atomic addition 效果就跟 clock 一樣好。有鑑於簡單性與支援性，之後都採用 atomic addition 這個做法。</p>
+<h4 id="分散式-Validation"><a href="#分散式-Validation" class="headerlink" title="分散式 Validation"></a>分散式 Validation</h4><p>類似 Microsoft Hakaton [5] ，在每個 tuple 上 validate tx，而不是用 centralized 的 critical section。</p>
+<h3 id="實作-H-Store-的技巧"><a href="#實作-H-Store-的技巧" class="headerlink" title="實作 H-Store 的技巧"></a>實作 H-Store 的技巧</h3><p>讓 thread 直接 access 其他 thread 的 memory，而不是還要另外送 query 過去讓其他 core 處理。</p>
+<h2 id="實驗"><a href="#實驗" class="headerlink" title="實驗"></a>實驗</h2><p>實驗的部分就不細談，基本上就是使用 YCSB Benchmark 去模擬各種 workloads，並且研究每種作法在不同環境的優缺點，以幫助使用者選擇自己適合用甚麼 Concurrency Control 方法。 實驗的數量很多，因此有興趣的人可以自己細看。</p>
+<p>另外提一下，1000 Cores 的機器目前還不存在，所以論文中是使用將多台機器連接在一起，並使用模擬器的方式去模擬的。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p>[1] Yu, Xiangyao, et al. “Staring into the abyss: An evaluation of concurrency control with one thousand cores.” Proceedings of the VLDB Endowment 8.3 (2014): 209-220.<br>[2] Kallman, Robert, et al. “H-store: a high-performance, distributed main memory transaction processing system.” Proceedings of the VLDB Endowment 1.2 (2008): 1496-1499.<br>[3] Ghemawat, Sanjay, and Paul Menage. “Tcmalloc: Thread-caching malloc.” (2009).<br>[4] J. Evans. jemalloc.<a target="_blank" rel="noopener" href="http://canonware.com/jemalloc">http://canonware.com/jemalloc</a><br>[5] Neumann, Thomas, Tobias Mühlbauer, and Alfons Kemper. “Fast serializable multi-version concurrency control for main-memory database systems.” Proceedings of the 2015 ACM SIGMOD International Conference on Management of Data. ACM, 2015.</p>
+</div><div id="disqus_thread"><script>var disqus_shortname = 'slmtsblog';
+var disqus_identifier = '2019/04/23/paper-cc-on-1000-cores/';
+var disqus_title = '論文筆記 - Staring into the Abyss: An Evaluation of Concurrency Control with One Thousand Cores';
+var disqus_url = 'http://www.slmt.tw/blog/2019/04/23/paper-cc-on-1000-cores/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//#{theme.disqus}.disqus.com/count.js" async></script></div></div><div id="footer"><p>&copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021</p></div></div></body></html>
