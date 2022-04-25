@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-TW"><head><!-- Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-103835191-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-103835191-1');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SLMT's Blog | BambooFox 第二堂社課心得</title><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/blog/css/style.css"><link rel="stylesheet" type="text/css" href="/blog/css/syntax-highlight.css"><script src="https://use.fontawesome.com/0bc11e7eba.js"></script><!-- Open Graph Protocol--><meta property="og:title" content="BambooFox 第二堂社課心得"><meta property="og:image" content="http://www.slmt.tw/blog/images/logo.png"><meta property="og:type" content="website"><meta property="og:url" content="/blog/2015/10/15/bamboofox-club-02/"><meta property="og:site_name" content="SLMT's Blog"><meta property="og:locale" content="zh-TW"><meta property="og:description" content="今天去了第二次交大 BambooFox 社課，這次內容主要在於 Reverse Engineering，以下紀錄了今天社課的要點。"><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/blog/rss.xml" title="SLMT's Blog" type="application/atom+xml">
+</head><body><div id="container"><div id="header"><h1 class="title">SLMT's Blog</h1><div class="pure-g navs"><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/.">All Posts</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/archives">Archive</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="https://www.slmt.tw/">About</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/rss.xml">RSS</a></div></div></div><div id="main"><h1 class="post-large-title">BambooFox 第二堂社課心得</h1><div class="post-meta"><div class="post-date"><i class="fa fa-calendar" aria-hidden="true"></i>2015/10/15</div><div class="post-cats"><i class="fa fa-folder-open" aria-hidden="true"></i><a class="post-cat" href="/blog/categories/ctf/">CTF</a>/<a class="post-cat" href="/blog/categories/ctf/bamboofox/">BambooFox</a></div><div class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a class="post-tag" href="/blog/tags/bamboofox/">#bamboofox</a><a class="post-tag" href="/blog/tags/ctf/">#ctf</a><a class="post-tag" href="/blog/tags/club/">#club</a></div></div><div class="post-content"><p>今天去了第二次交大 <a target="_blank" rel="noopener" href="https://bamboofox.torchpad.com/">BambooFox</a> 社課，這次內容主要在於 Reverse Engineering，以下紀錄了今天社課的要點。</p>
+<a id="more"></a>
+
+<h2 id="課程內容"><a href="#課程內容" class="headerlink" title="課程內容"></a>課程內容</h2><p>這次大概有三個部分。第一部分是在檢討上一次社課留給學生的練習題，第二部分則是在分享一些常用的工具，最後則是今天的主軸，<strong>逆向工程</strong>。</p>
+<p>如果各位想看投影片的話，只要到他們 <a target="_blank" rel="noopener" href="https://bamboofox.torchpad.com/">官網</a> 就可以找到每次社課的投影片以及錄影了。</p>
+<h3 id="第一部分：練習題"><a href="#第一部分：練習題" class="headerlink" title="第一部分：練習題"></a>第一部分：練習題</h3><p>我在上一篇有提過，Python 的 <a target="_blank" rel="noopener" href="https://docs.python.org/2/library/pickle.html">pickle module</a> 存在著一個漏洞，會讓 object 在 deserialize 的時候執行預先設計好的程式碼。因此我們可以自己產生 serialize 後的 object，裡面插入我們想讓目標程式執行的程式碼。以達到取得目標機器上 shell 的目的。</p>
+<p>各位如果有興趣的話，他們有把題目放到練習網站上，可以到下列網址玩玩看 (帳號可以免費申請)：</p>
+<p><a target="_blank" rel="noopener" href="http://140.113.194.85:3000/problems/8">http://140.113.194.85:3000/problems/8</a></p>
+<p>這邊我提兩個很重要的工具：</p>
+<h4 id="NetCat"><a href="#NetCat" class="headerlink" title="NetCat"></a>NetCat</h4><p><code>nc</code> (NetCat) 是一個程式，linux 系統上面大多都有內建。它的功用是可以連到指定的 ip 與 port，並將使用者輸入的資料導向到目標伺服器上。然後把目標伺服器上回傳的結果導回我們的標準輸出 (通常是螢幕) 上。</p>
+<p>這個東西真的很好用。以往如果我要跟一個伺服器溝通的話，都要寫一些程式來做 socket programming。可是有這東西的話，就完全不需要自己寫程式來做了！而且許多 CTF 競賽的程式都不是那種可以用像是 HTTP 或者 SSH Protocol 連上的東西，通常是單純以文字直接溝通的伺服器。因此 <code>nc</code> 就可以幫助你連上這種程式。</p>
+<p>另外還有一點很重要的是， <code>nc</code> 不但可以主動連到其他伺服器，還可以被動式的開啟 socket 接收資料。這個功能也很常用！例如你利用某個漏洞進入了伺服器，但是你不一定可以看到你的程式碼的執行結果。這個時候就必須讓該伺服器把執行指令的結果，利用 <code>nc</code> 吐回你的機器上。而你的機器上就自然而然需要開啟一個 socket 接收資訊囉！</p>
+<h4 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h4><p>上一篇文章也有提到 <a target="_blank" rel="noopener" href="http://pwntools.com/">pwntools</a>。這是一個專門用來打 CTF 用的 python module。</p>
+<p>事實上，當你玩了一下這道題目之後，你大概會知道要怎麼取得 flag。可是接著很快就會發現，每個指令都要慢慢輸入真的是很麻煩。而且特別這題又有 RSA Key，慢慢複製輸入又會令人更不爽。所以你大概就會瞭解到這裡需要寫一個 script 來自動化整個過程。</p>
+<p>pwntools 提供了很多方便的 function 來幫助你建立自動化的 script，目前最需要知道的就是 <code>send</code> 跟 <code>recvuntil</code>。用法可以查查 bamboofox 上一次社課的投影片，或者看看官方的說明文件。</p>
+<h3 id="第二部分：分享常用工具"><a href="#第二部分：分享常用工具" class="headerlink" title="第二部分：分享常用工具"></a>第二部分：分享常用工具</h3><p>這邊稍微介紹了一下電腦執行程式的架構，為下一部份舖梗。另外介紹了一些工具，主要是 vim 與 tmux。</p>
+<p>這兩者的教學網路上很多，這邊就不贅述了。Google 一下就可以看到不少資源。我個人特別推 tmux，真的是很方便的工具。我因為研究的關係時常使用。如果你想要在同一個 terminal 上開多個分割視窗，或者你想要與伺服器中斷連線後，下一次進去能可以看到上一次的工作狀態，那 tmux 絕對是你的好選擇！</p>
+<h3 id="第三部分：逆向工程"><a href="#第三部分：逆向工程" class="headerlink" title="第三部分：逆向工程"></a>第三部分：逆向工程</h3><p>逆向工程是今天最主要的內容。不過重點大概就以下幾點：</p>
+<ol>
+<li>x86 系統架構</li>
+<li>Intel x86 組合語言</li>
+<li><a target="_blank" rel="noopener" href="https://www.hex-rays.com/products/ida/">IDA Pro</a> 的使用方式</li>
+</ol>
+<p>另外還有講一個叫做 Immunity Debugger 的工具，不過我那部份聽得沒有很懂，而且後來也沒用到，所以這邊也就不提了。</p>
+<h4 id="組合語言"><a href="#組合語言" class="headerlink" title="組合語言"></a>組合語言</h4><p>這段的目標在於分析一個程式的行為。最直接的辦法就是把程式反組譯 (disassembly)，然後看看他的程式碼是怎麼跑的。反組譯得到的程式碼不會是 C 語言，而是很接近 CPU 執行方式的組合語言 (Assembly Language)。組合語言沒有 C 語言那麼容易看懂，而且隨著不同架構，組合語言的語法也會有些微不同。幸好大多數的概念都差不多，因此學過一種之後，其他種類也不會太難上手。</p>
+<p>我之前在 PicoCTF 2013 有看過一本書，寫得還不錯，而且淺顯易懂。這邊將他們官方提供的電子版放在 <a target="_blank" rel="noopener" href="https://2013.picoctf.com/docs/asmhandout.pdf">這裡</a> 讓各位下載。下載下來一看之後會發現頁數還不少，不過我覺得也不需要全部看完。大概前面三分之一看懂就好。後面的東西只要快速把各種指令看看就好。甚至可以也都不看後面的東西，等到真正遇到的時候再去查就好。</p>
+<h4 id="IDA-Pro"><a href="#IDA-Pro" class="headerlink" title="IDA Pro"></a>IDA Pro</h4><p>IDA Pro 是一個逆向工程的常用工具。這個工具到官網上可以抓到免費版，雖然功能有些殘缺，但是也大致夠用。大概你會發現最缺的功能就是不能看 64bit 的程式，不過除此之外都還好。</p>
+<p>這個工具會幫你將程式轉為組合語言給你看，並且幫你建立一些 flow chart，以方便掌握程式的執行脈絡。事實上，以前我就有稍微用過這個程式，不過老實說一開始我也不知道該從哪裡看起。主要是因為通常程式反組譯之後得到的程式碼都非常多，第一眼看到就眼花撩亂。因此他們今天上課就提到，其實可以從 <code>.string</code> 視窗開始研究。</p>
+<p><code>.string</code> 視窗列出了這個程式被預先填入的字串常數。因為字串本來就是要顯示給使用者看的，所以字串都會完完整整地存在程式的某個位置。而這個時候，你就可以先看那些字串跟你要找的東西相關。例如你今天可能要找驗證密碼的程式碼，那這時候如果你看到了 <code>Sorry, password is wrong</code>，你大概就可以知道這段話一定跟你要找的程式碼有關。IDA Pro 還有個很方便的功能，就是會幫你標出字串在哪段程式碼被使用到，因此你就可以跳到那段程式碼，來看看他是怎麼驗證的。</p>
+<p>其他還有像是，會幫你標出 function 內的區域變數，另外也可以幫區塊與變數重新命名等等。善用的話就可以大大幫助逆向工程。</p>
+<h4 id="轉換成-C-Code"><a href="#轉換成-C-Code" class="headerlink" title="轉換成 C Code"></a>轉換成 C Code</h4><p>就算已經會組合語言，也會使用 IDA Pro，真正看下去的時候也不一定能很快上手。這邊有個很重要的概念在於，你要知道那些 C 語言的程式碼轉換後會變成甚麼樣的組合語言。今天上課他們有稍微提到常見的迴圈和 function call 會大概變成甚麼樣子。如果有稍微記得的話，對還原成 C 的時候會很有幫助。詳情也可以看看他們的投影片。</p>
+<p>再來，就是要知道一些組合語言的潛規則。像是當你看到了下面這段程式碼：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">push ...</span><br><span class="line">push ...</span><br><span class="line">push ...</span><br><span class="line">call ...</span><br></pre></td></tr></table></figure>
+<p>也就是一堆 <code>push</code> 之後接著一個 <code>call</code>，這其實就是在呼叫 function。<code>push</code> 將呼叫 function 的參數存入 stack，<code>call</code> 則是在讓程式的執行跳轉到 function 的程式碼執行。</p>
+<p>而且事實上，並不是所有呼叫 function 的程式碼都長這樣，有的則是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov    %eax,0x4(%esp)</span><br><span class="line">mov    %ebx,(%esp)</span><br><span class="line">call   ...</span><br></pre></td></tr></table></figure>
+<p><code>%eax</code>、<code>%ebx</code>、<code>%esp</code> 都是 register。Register 是 CPU 之中用來暫存資料的空間。其中 <code>%esp</code> 代表的是 stack 最頂層的位置。這一連串的 <code>mov</code> 動作其實就等同於 <code>push</code>，只是 <code>push</code> 會移動 <code>%esp</code>，<code>mov</code> 不會移動。所以這一段程式碼其實跟上一段是差不多的行為。可是沒看過就會覺得怎麼怪怪的。</p>
+<p>又或者你要知道，通常 function return 的時候，會把 return value 塞在 <code>%eax</code> 裡面。因此時常在某些 function 回來之後，就會看到程式碼取出 <code>%eax</code> 的值做其他事情。</p>
+<p>很多規則都是需要多看幾次或者上網查過才會知道的。</p>
+<p>最後最重要的是，耐心。程式碼一多起來看了就會很煩，所以一定要仔細地慢慢看。我個人會一邊看一邊試著把組語還原成 C 的程式碼，這樣我最後才能整理出這個程式的邏輯到底是如何。</p>
+<h4 id="逆向工程練習題"><a href="#逆向工程練習題" class="headerlink" title="逆向工程練習題"></a>逆向工程練習題</h4><p>逆向工程的部分他們也有提供練習題，有興趣的可以玩玩看：</p>
+<ul>
+<li>Windows 程式題：<a target="_blank" rel="noopener" href="http://140.113.194.85:3000/problems/18">http://140.113.194.85:3000/problems/18</a></li>
+<li>Linux 程式題：<a target="_blank" rel="noopener" href="http://140.113.194.85:3000/problems/19">http://140.113.194.85:3000/problems/19</a></li>
+</ul>
+<p>以上這幾題我都解出來了，如果想要討論的話可以留言討論XD</p>
+</div><div id="disqus_thread"><script>var disqus_shortname = 'slmtsblog';
+var disqus_identifier = '2015/10/15/bamboofox-club-02/';
+var disqus_title = 'BambooFox 第二堂社課心得';
+var disqus_url = 'http://www.slmt.tw/blog/2015/10/15/bamboofox-club-02/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//#{theme.disqus}.disqus.com/count.js" async></script></div></div><div id="footer"><p>&copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021</p></div></div></body></html>

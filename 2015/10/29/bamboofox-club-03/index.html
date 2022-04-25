@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-TW"><head><!-- Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-103835191-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-103835191-1');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SLMT's Blog | BambooFox 第三堂社課心得</title><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/blog/css/style.css"><link rel="stylesheet" type="text/css" href="/blog/css/syntax-highlight.css"><script src="https://use.fontawesome.com/0bc11e7eba.js"></script><!-- Open Graph Protocol--><meta property="og:title" content="BambooFox 第三堂社課心得"><meta property="og:image" content="http://www.slmt.tw/blog/images/logo.png"><meta property="og:type" content="website"><meta property="og:url" content="/blog/2015/10/29/bamboofox-club-03/"><meta property="og:site_name" content="SLMT's Blog"><meta property="og:locale" content="zh-TW"><meta property="og:description" content="這次的課程接續上次組合語言的內容，主要在談 x86 架構下的組合語言，以及常見的 Buffer Overflow 漏洞。"><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/blog/rss.xml" title="SLMT's Blog" type="application/atom+xml">
+</head><body><div id="container"><div id="header"><h1 class="title">SLMT's Blog</h1><div class="pure-g navs"><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/.">All Posts</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/archives">Archive</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="https://www.slmt.tw/">About</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/rss.xml">RSS</a></div></div></div><div id="main"><h1 class="post-large-title">BambooFox 第三堂社課心得</h1><div class="post-meta"><div class="post-date"><i class="fa fa-calendar" aria-hidden="true"></i>2015/10/29</div><div class="post-cats"><i class="fa fa-folder-open" aria-hidden="true"></i><a class="post-cat" href="/blog/categories/ctf/">CTF</a>/<a class="post-cat" href="/blog/categories/ctf/bamboofox/">BambooFox</a></div><div class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a class="post-tag" href="/blog/tags/bamboofox/">#bamboofox</a><a class="post-tag" href="/blog/tags/ctf/">#ctf</a><a class="post-tag" href="/blog/tags/club/">#club</a></div></div><div class="post-content"><p>這次的課程接續上次組合語言的內容，主要在談 x86 架構下的組合語言，以及常見的 Buffer Overflow 漏洞。</p>
+<a id="more"></a>
+
+<h2 id="課程內容分享"><a href="#課程內容分享" class="headerlink" title="課程內容分享"></a>課程內容分享</h2><h3 id="組合語言"><a href="#組合語言" class="headerlink" title="組合語言"></a>組合語言</h3><p>一開始先回顧一下 x86 下的架構，包含 registers 與一些 conditional flags 等等。 接著複習了一些 x86 架構下常見的組合語言指令。 這邊有提到 Intel 與 AT&amp;T 兩種 style 不同的寫法，並介紹一些之間的差異等等。</p>
+<p>最重要的資訊，我想應該就是了解如何做 system call 吧！</p>
+<p>System call 是一種讓你程式跟作業系統 (Opearating System, OS) 溝通的管道。 舉凡要進行任何需要 OS 幫忙的工作，都要透過 system call。 而在組合語言之中，想要進行 system call，就要使用 interrept 的指令來暫時中斷程式，並轉交權限給 OS。 大概進行的 pattern 就如同下面所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mov		eax, xxx	; 想要 OS 執行的 function 代碼</span><br><span class="line">mov		ebx, xxx	; function 的第一個參數</span><br><span class="line">mov		ecx, xxx	; function 的第二個參數</span><br><span class="line">mov		edx, xxx	; function 的第三個參數</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">int		0x80		; 進行 system call</span><br></pre></td></tr></table></figure>
+<p>一開始要先將一些參數存入 registers，<code>eax</code> 要放你想要 OS 進行的 system call function 代碼。 例如你想要系統讀檔，就要放 3 (sys_read)。 然後，其他 registers，像是 <code>ebx</code>, <code>ecx</code>, <code>edx</code>, <code>esx</code>, <code>edi</code> 則是要放呼叫該動作的參數。 例如剛剛說的讀檔，就必須要分別在 <code>ebx</code>、<code>ecx</code> 與 <code>edx</code> 放入 file descriptor、buffer pointer 與想要讀取的大小。 最後再執行 <code>int 0x80</code> 指令來進行 system call。</p>
+<p>詳細每個 register 在進行 system call 所需要放的參數可以在 <a target="_blank" rel="noopener" href="http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html">這個表</a> 找到。</p>
+<p>我想學這個的目的，除了是為了要能夠對程式做逆向工程之外，也是為了要在之後 inject (注入) shellcode 而使用。 甚至是做更進一步的攻擊。 算是還挺實用的。</p>
+<h3 id="Buffer-Overflow"><a href="#Buffer-Overflow" class="headerlink" title="Buffer Overflow"></a>Buffer Overflow</h3><p>Buffer overflow 是 C/C++ 常見的漏洞。 只要你的程式之中使用到了陣列或指標，並配合呼叫了不安全的 function，就有可能有潛在的問題。</p>
+<p>例如下面這段 code：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> input[<span class="number">50</span>];</span><br><span class="line"></span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>, input);</span><br></pre></td></tr></table></figure>
+<p>這段看起來極其平淡，且在一開始程設課就學過的 code，潛藏著極大的危機存在。</p>
+<p><code>scanf</code> 不會檢查使用者輸入的長度，也不會知道 <code>input</code> 這個陣列有多大，除非遇到特定的字元，不然他就會持續性地一直讀取輸入值。 而當使用者輸入的長度超過了 <code>input</code> 的空間，也就是在上例中超過 49 個字元 (最後一個字是 <code>\0</code>)，就會發生 overflow 的情況。 一般來說 overflow 只會讓程式出現 <code>segmentation fault</code> 而已，可是有心人士可以利用這個來控制程式的運作方向。</p>
+<p>區域變數通常是放在 stack 中，stack 除了變數之外，還會放著各式各樣其他的資訊。 像是 function arguments，stack frame pointer，還有最重要的 saved eip。 EIP 是 x86 系統下一個特殊的 register，這個 register 不能直接寫入，只能透過特殊指令來進行修改。 EIP 其重要之處，就是在他負責告訴 CPU，下一個要執行的指令在哪裡。</p>
+<p>因此掌控了 EIP，就掌控了整個程式走向。</p>
+<p>想想前面提到的 buffer overflow，到底多出的部分跑哪去了？基本上就是跑到外面的地方，覆蓋掉 stack 上的其他資訊。</p>
+<p>剛剛提到了 stack 有放 saved eip。 當程式呼叫 function 的時候，為了要能夠在 function 結束之後，跳回到原本的位置，會將回去預計繼續執行的程式碼位址暫存在 stack 中，這就是 saved eip。</p>
+<p>利用 buffer overflow，你就會有機會覆寫掉 saved eip 的數值。 只要控制得好，就能將你想要讓程式執行的程式碼位址覆蓋掉 saved eip。 當程式 return 的時候，就會拿出你預先設計的數值，並跳轉到你希望的位置繼續執行程式。 這個時候就可以做很多有趣的事情，例如讓程式執行你預先塞好的程式碼，然後呼叫 shell 等等。</p>
+<p>這也是到現今為止還是常常能看見的大洞。 不過編譯器其實也有在進步，為了這防止駭客攻擊這個部分，使用了各式各樣的技巧來保護。 當然駭客也不是笨蛋，也想出了很多方法繞過這些機制。 到現在還沒有一定的勝負。</p>
+<h2 id="練習題的收穫"><a href="#練習題的收穫" class="headerlink" title="練習題的收穫"></a>練習題的收穫</h2><p>今天主要的練習是 <a target="_blank" rel="noopener" href="http://train.cs.nctu.edu.tw/problems/1">這題</a> ，重點在於 buffer overflow 的觀念。 讓正確的 buffer overflow，找到如何覆蓋 saved eip，找到程式應該要執行到哪，以及要怎麼避免程式搗亂的行為。</p>
+<p>這題今天學到最有用的知識有兩點：</p>
+<h3 id="1-scanf-終止條件"><a href="#1-scanf-終止條件" class="headerlink" title="1. scanf 終止條件"></a>1. <code>scanf</code> 終止條件</h3><p>這題有個部分會檢查你輸入 buffer 的長度，檢查的方式是利用 <code>strlen</code>，並且會對你的 buffer 做攪亂的動作。 這邊我們可以讓程式只攪亂部分的 buffer，或甚至完全繞過。 重點在於讓程式以為 buffer 很短，但是其實比他知道的大很多。</p>
+<p>但是要怎麼做呢？ <code>strlen</code> 的檢查中止條件是看到 <code>\0</code> 就停下來。 換句話說，<code>\0</code> 之前的內容都會被當作字串的一部分，之後的東西就不管了。 這邊我一開始有想到在 buffer 內插入 <code>\0</code> 來防止程式攪亂我的 payload。 但是我馬上想到了，<code>scanf</code> 應該會把 <code>\0</code> 也當作終止條件，所以我想這招應該沒用。</p>
+<p>可是在卡了許久之後，經過前輩提示，看了看提示的投影片，才知道原來 <code>scanf</code> 的中止條件更狹隘。 他們只會在遇到空白或是換行字元才停，<code>\0</code> 也會被當成字串的一部分吃進來。 這還真是大洞啊！ 我完全意想不到這種我以為該有的條件竟然沒有！ 看來 C\C++ 比我想像的更危機四伏。</p>
+<h3 id="2-cat"><a href="#2-cat" class="headerlink" title="2. cat -"></a>2. <code>cat -</code></h3><p>這個也很有趣。 他們的程式是放在他們專有的機器上執行，而我們必須要透過網路連線才有辦法跟程式溝通。 通常會使用 <code>nc</code> (netcat) 進行。 當攻擊者取得 shell 之後，就可以拿到機器上的 flag。 不過雖然我將 payload 送過去之後，也成功呼叫出 shell 了。 可是遇到了一個很大的問題，就是我無法跟 shell 進行互動！ 因為我使用了 <code>cat payload | nc [IP] [Port]</code> 的方式來將預先寫好的 input 傳過去，但是也封閉了我使用 <code>nc</code> 進行溝通的道路。</p>
+<p>正當我在想是否要自己寫 python code 來互動的時候，發現了一個更簡單的方式！</p>
+<p>就是使用 <code>cat -</code>！ <code>cat</code> 指令會印出檔案的內容，後面接著檔案名稱。 那 <code>-</code> 又是啥檔案？</p>
+<p><code>-</code> 代表的就是 standard input！ 也就是標準輸入 (通常是鍵盤)！</p>
+<p>如果你有自己的 unix 環境可以試試看，使用 <code>cat -</code> ，並輸入一些字元會發生甚麼事情。 你會發現它會將你輸入的東西直接 output 出來。</p>
+<p>這就是我需要的啊！</p>
+<p>我只要把上面的指令改成 <code>cat payload - | nc [IP] [Port]</code>。 這樣 <code>cat</code> 就會先將 payload 傳過去，然後再轉接 standrad input 給它。 這樣我就可以在取得 shell 之後，輸入指令給 <code>nc</code> 傳送了！</p>
+<p>這個算是我今天覺得最有用的技巧XD</p>
+</div><div id="disqus_thread"><script>var disqus_shortname = 'slmtsblog';
+var disqus_identifier = '2015/10/29/bamboofox-club-03/';
+var disqus_title = 'BambooFox 第三堂社課心得';
+var disqus_url = 'http://www.slmt.tw/blog/2015/10/29/bamboofox-club-03/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//#{theme.disqus}.disqus.com/count.js" async></script></div></div><div id="footer"><p>&copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021</p></div></div></body></html>

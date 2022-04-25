@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-TW"><head><!-- Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-103835191-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-103835191-1');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SLMT's Blog | BambooFox 第一堂社課心得</title><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/blog/css/style.css"><link rel="stylesheet" type="text/css" href="/blog/css/syntax-highlight.css"><script src="https://use.fontawesome.com/0bc11e7eba.js"></script><!-- Open Graph Protocol--><meta property="og:title" content="BambooFox 第一堂社課心得"><meta property="og:image" content="http://www.slmt.tw/blog/images/logo.png"><meta property="og:type" content="website"><meta property="og:url" content="/blog/2015/10/01/bamboofox-club-01/"><meta property="og:site_name" content="SLMT's Blog"><meta property="og:locale" content="zh-TW"><meta property="og:description" content="今天去參加了交大 BambooFox 的第一堂社課，收穫不少。因此我想寫下一些參與的心得，並記錄一些學習到的技巧。"><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/blog/rss.xml" title="SLMT's Blog" type="application/atom+xml">
+</head><body><div id="container"><div id="header"><h1 class="title">SLMT's Blog</h1><div class="pure-g navs"><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/.">All Posts</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/archives">Archive</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="https://www.slmt.tw/">About</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/rss.xml">RSS</a></div></div></div><div id="main"><h1 class="post-large-title">BambooFox 第一堂社課心得</h1><div class="post-meta"><div class="post-date"><i class="fa fa-calendar" aria-hidden="true"></i>2015/10/01</div><div class="post-cats"><i class="fa fa-folder-open" aria-hidden="true"></i><a class="post-cat" href="/blog/categories/ctf/">CTF</a>/<a class="post-cat" href="/blog/categories/ctf/bamboofox/">BambooFox</a></div><div class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a class="post-tag" href="/blog/tags/bamboofox/">#bamboofox</a><a class="post-tag" href="/blog/tags/ctf/">#ctf</a><a class="post-tag" href="/blog/tags/club/">#club</a></div></div><div class="post-content"><p>今天去參加了交大 <a target="_blank" rel="noopener" href="https://bamboofox.torchpad.com/">BambooFox</a> 的第一堂社課，收穫不少。因此我想寫下一些參與的心得，並記錄一些學習到的技巧。</p>
+<a id="more"></a>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其實很早以前我就一直對資訊安全方面的東西有興趣，最早可以追朔到我國中的時候，不過當時並不具備相關的知識。後來到大學之前，也有購買一些相關書籍。可惜大多數的書都只是教如何使用一些滲透軟體，技術面的東西對我來說又太深。最後就沒有繼續研究。</p>
+<p>上大學後，開始學習程式語言與各種撰寫技巧，逐漸具備各式各樣的知識。最近想起了當年小時候對這塊的興趣。雖然現在已經是再一年就要脫離學生生活的碩二生，但是還是希望在這最後學期能夠真正地好好學好這些東西。</p>
+<p>當然在這之前也並非沒有研究，只是因為無人指導，也不知道該從哪裡開始。直到今年參加了 <a target="_blank" rel="noopener" href="http://hitcon.org/">HITCON</a> (台灣駭客年會)，才開始對這塊有初步的認識。在會中聽說交大今年要成立相關社團，而清大一直都沒有這種社團，所以我當然就很興奮地過去參加啦！</p>
+<h2 id="課程內容"><a href="#課程內容" class="headerlink" title="課程內容"></a>課程內容</h2><p>今天的課程內容主要涵蓋兩個部分，基本 <strong>Linux Shell 操作</strong> 與 <strong>Python 基礎</strong>。</p>
+<h3 id="Linux-Shell-操作"><a href="#Linux-Shell-操作" class="headerlink" title="Linux Shell 操作"></a>Linux Shell 操作</h3><p>基本 Linux Shell 操作我其實算是挺熟悉了，畢竟平常實驗室的實驗都是在 CentOS 上跑，還寫過一點 bash script。而且網路上的資源也非常豐富，其中繁體中文資源以「<a target="_blank" rel="noopener" href="http://linux.vbird.org/">鳥哥的Linux 私房菜</a>」最為有名。不過還是有兩點值得一提的東西。</p>
+<h4 id="Kali-Linux"><a href="#Kali-Linux" class="headerlink" title="Kali Linux"></a>Kali Linux</h4><p><a target="_blank" rel="noopener" href="https://www.kali.org/">Kali Linux</a> 是 Linux 的其中一個分支，主要是基於 Debian 開發的作業系統。這個系統的特點在於，它具有大量的滲透測試工具，並提供了許多支援，因此成為了駭客們愛用的系統。HITCON 會場也可以看到許多人都在使用。</p>
+<p>基本上這個系統確實非常方便，甚至對很多人來說都是不可或缺的工具。不過操作上跟一般的 Linux 系統沒甚麼太大的差別，所以也不會太難上手。</p>
+<p>如果想要快速了解 Kali Linux 上有什麼工具可以使用的話，我推薦可以參考這個清單：<a target="_blank" rel="noopener" href="https://comparite.ch/kalics">https://comparite.ch/kalics</a>。</p>
+<h4 id="特殊-Bash-指令"><a href="#特殊-Bash-指令" class="headerlink" title="特殊 Bash 指令"></a>特殊 Bash 指令</h4><p>Shell 的使用算是學習 Linux 很重要的基礎，一般的操作很快就可以上手。不過很不錯的是，他們有教一些進階與特殊的用法。舉個例子來說，在 Bash 中使用 <code>$(...)</code>，其中包含的指令就是會被執行，而輸出的東西則會變成變數。然後 <code>$0</code> 這個變數通常指向 <code>bash</code>。因此如果你讓某些程式，執行了以下這個指令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$($0)</span><br></pre></td></tr></table></figure>
+<p>就會啟動 shell，讓別人可以為所欲為。(有興趣的人可以用 C 的 <code>system()</code> 或 python 的 <code>os.system()</code> 執行看看)</p>
+<p>這個指令的特點在於沒有使用到任何 <code>bash</code> 或 <code>sh</code> 的字樣就啟動了 shell，這樣就可以越過某些過濾式的檢查。</p>
+<h3 id="Python-基礎"><a href="#Python-基礎" class="headerlink" title="Python 基礎"></a>Python 基礎</h3><p>老實說，我對 python 幾乎一竅不通。最近才開始遵循 <a target="_blank" rel="noopener" href="http://learnpythonthehardway.org/">Learn Python The Hard Way</a> 的教學開始入門。今天社課教了不少基礎用法，讓大家快速上手。值得提的是，他們有介紹到一個叫做 <a target="_blank" rel="noopener" href="https://www.hackerrank.com/">Hacker Rank</a> 的網站，可以讓大家練習 Python。</p>
+<p>另一點值得講的，他們介紹了一個好用的 Pyhton Module，<a target="_blank" rel="noopener" href="http://pwntools.com/">Pwntools</a>。這個工具是專門為 CTF (Capture The Flag) 比賽設計的 module，裡面包含了許多好用的 Python function，讓大家可以快速撰寫出針對某漏洞設計的 Python script。今天我也在之後的練習之中體會到了好處。</p>
+<h2 id="課後練習"><a href="#課後練習" class="headerlink" title="課後練習"></a>課後練習</h2><p>他們除了上課之外，還很用心地準備了一個練習題給大家測試。這個練習題主要是來自於 Python 的 <a target="_blank" rel="noopener" href="https://docs.python.org/2/library/pickle.html">pickle module</a> 的漏洞。以下解釋一下這個漏洞。</p>
+<p>首先可以先看這段程式碼，有興趣的人可執行看看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle, os</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Exploit</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__reduce__</span>(<span class="params">self</span>):</span></span><br><span class="line">		comm = <span class="string">&quot;sh&quot;</span></span><br><span class="line">		<span class="keyword">return</span> (os.system, (comm,))</span><br><span class="line"></span><br><span class="line">a = pickle.dumps(Exploit())</span><br><span class="line">b = pickle.loads(a)</span><br></pre></td></tr></table></figure>
+<p>執行後會發現這段程式碼會啟動 shell，為什麼呢？</p>
+<p>在解釋之前，我們要先了解 pickle 這個 module 是做甚麼的。</p>
+<p>Pickle module 主要是用來對物件進行 serialize 與 deserialize 的動作。簡單地說，serialize 就是把物件轉換成另一個儲存形式 (像是字串或其他二進位碼)，deserialize 則是把資料還原成物件。其中，<code>pickle.dumps()</code> 就是在 serialize，<code>pickle.loads()</code> 就是在 deserialize。</p>
+<p>而啟動 shell 的動作就發生在 <code>b = pickle.loads(a)</code> 這行，也就是將資料還原成物件的時候。</p>
+<p>這主要是因為，<code>Exploit</code> 這個 class 中的 method <code>__reduce__</code> 回傳了一組 tuple，<code>(os.system, (comm,))</code>。</p>
+<p>Pickle module 的文件中有寫到，class 可以提供一個稱為 <code>__reduce__</code> 的 method 來說明如何 deserialize 物件。這個 <code>__reduce__</code> method 必須要傳回一些數值，來指示如何還原物件。第一個數值代表初始化物件的時候必須要呼叫的 function，第二個數值則是該 function 的參數。如果你仔細對照一下上面的程式碼，就會發現第一個回傳值為 <code>os.system</code>，第二個則為一個只有包含 <code>comm</code> 的 tuple。其結果是，會導致程式在 deserialize 時執行 <code>os.system(&quot;sh&quot;)</code> 這段程式碼，而啟動 shell。</p>
+<p>這確實非常有趣XD</p>
+<p>後來社團的前輩們就以這題為基礎，在一台 server 上架了一個 service。該 service 包含著這個漏洞，因此可以利用這個漏洞取得該機器上的資訊。</p>
+<p>同時他們也鼓勵利用 Python script 來寫這題，讓我好好地把前面學的很多東西都用上了！</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>光是今天的課就感覺收穫不少，而且前輩們在練習期間，也非常友善地不斷關心社員是否遇到甚麼問題。也不會因為我是清大來的就把我晾在一邊XD。這些讓我非常期待接下來的課程。</p>
+<p>希望之後上課也能夠像今天這樣寫下心得與筆記。</p>
+</div><div id="disqus_thread"><script>var disqus_shortname = 'slmtsblog';
+var disqus_identifier = '2015/10/01/bamboofox-club-01/';
+var disqus_title = 'BambooFox 第一堂社課心得';
+var disqus_url = 'http://www.slmt.tw/blog/2015/10/01/bamboofox-club-01/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//#{theme.disqus}.disqus.com/count.js" async></script></div></div><div id="footer"><p>&copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021</p></div></div></body></html>

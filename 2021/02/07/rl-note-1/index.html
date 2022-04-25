@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="zh-TW"><head><!-- Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-103835191-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-103835191-1');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SLMT's Blog | Reinforcement Learning 筆記 (1) - 基本概念與目標</title><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/blog/css/style.css"><link rel="stylesheet" type="text/css" href="/blog/css/syntax-highlight.css"><script src="https://use.fontawesome.com/0bc11e7eba.js"></script><!-- Open Graph Protocol--><meta property="og:title" content="Reinforcement Learning 筆記 (1) - 基本概念與目標"><meta property="og:image" content="http://www.slmt.tw/blog/images/logo.png"><meta property="og:type" content="website"><meta property="og:url" content="/blog/2021/02/07/rl-note-1/"><meta property="og:site_name" content="SLMT's Blog"><meta property="og:locale" content="zh-TW"><meta property="og:description" content="最近因為在探討新的研究方向，所以開始踏入了 Reinforcement Learning (以下簡稱 RL) 的領域。 這篇文章記錄了我學習 RL 的過程與理解，以供需要其他打算學習 RL 的人參考。"><script type="text/javascript">MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};</script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/blog/rss.xml" title="SLMT's Blog" type="application/atom+xml">
+</head><body><div id="container"><div id="header"><h1 class="title">SLMT's Blog</h1><div class="pure-g navs"><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/.">All Posts</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/archives">Archive</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="https://www.slmt.tw/">About</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/rss.xml">RSS</a></div></div></div><div id="main"><h1 class="post-large-title">Reinforcement Learning 筆記 (1) - 基本概念與目標</h1><div class="post-meta"><div class="post-date"><i class="fa fa-calendar" aria-hidden="true"></i>2021/02/07</div><div class="post-cats"><i class="fa fa-folder-open" aria-hidden="true"></i><a class="post-cat" href="/blog/categories/reinforcement-learning/">Reinforcement Learning</a></div><div class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a class="post-tag" href="/blog/tags/note/">#note</a><a class="post-tag" href="/blog/tags/reinforcement-learning/">#reinforcement learning</a></div></div><div class="post-content"><p>最近因為在探討新的研究方向，所以開始踏入了 Reinforcement Learning (以下簡稱 RL) 的領域。 這篇文章記錄了我學習 RL 的過程與理解，以供需要其他打算學習 RL 的人參考。</p>
+<a id="more"></a>
+
+<h2 id="RL-問題簡介"><a href="#RL-問題簡介" class="headerlink" title="RL 問題簡介"></a>RL 問題簡介</h2><p>RL 問題指的是設計一個策略 (policy)，讓他取得當下環境的狀態 (state)，來決定要做什麼樣動作 (action)，以讓我們最後使用該策略可以取得最大的總報酬 (total reward) 的問題。RL 可以拿來解決許多實務的問題，例如走迷宮、下圍棋、打遊戲、自動駕駛車等等。</p>
+<p>更正式來說，一個 RL 問題包含以下幾個要素：</p>
+<ul>
+<li>State $s^{(t)}$：在一個環境中時間 $t$ (或是稱為第 $t$ 步) 的狀態，隨時間改變<ul>
+<li>一般假設環境本身不會改變，例如迷宮的路是固定的，狀態則代表人在迷宮的位置等等資訊。</li>
+</ul>
+</li>
+<li>Action $a^{(t)}$：在時間 $t$ 採取的行動</li>
+<li>Reward $R^{(t)}$：在時間 $t$ 採取行動之後取得的報酬</li>
+</ul>
+<p>目標：找到一個策略 policy $\pi$，以取得最大的總和報酬 (total reward)： $\Sigma_t R^{(t)}$。</p>
+<h2 id="Markov-Decision-Processes"><a href="#Markov-Decision-Processes" class="headerlink" title="Markov Decision Processes"></a>Markov Decision Processes</h2><p>Reinforcement Learning 為了方便計算，一般會假設問題是一個 Markov Decision Processes (以下簡稱 MDP)。</p>
+<h3 id="MDP-假設"><a href="#MDP-假設" class="headerlink" title="MDP 假設"></a>MDP 假設</h3><p>首先我們先假設要解決的問題之中的 state 的序列是一個 Markov Process。意思就是一個 state $s^{(t)}$ 出現的機率只跟它的上一個 state  $s^{(t-1)}$ 有關，而跟更早之前的 state 無關。換句話說，考慮了之前所有狀態跟只考慮當下狀態的基礎上，下一個狀態的機率分布是相同的。寫成數學式如下：</p>
+<p>$$<br>P(s^{(t+1)}|s^{(t)},s^{(t-1)},…)=P(s^{(t+1)}|s^{(t)})<br>$$</p>
+<p>如果這個假設成真，解 RL 問題時就可以不需要考慮更早之前的狀態，只要關注當下的狀態就好。</p>
+<p>而 Reinforcement Learning 則是在解 Markov <strong>Decision</strong> Process，也就是 state 的變換是在<strong>我們的控制中</strong>的 Markov Process。</p>
+<h3 id="基本要素"><a href="#基本要素" class="headerlink" title="基本要素"></a>基本要素</h3><p>一個 Markov Decision Process 包含以下幾個基本要素與符號：</p>
+<ul>
+<li>State space $\mathbb{S}$: 定義所有可能出現的 state</li>
+<li>Action space $\mathbb{A}$: 定義所有可能的 action</li>
+<li>Initial state $s^{(0)}$: 初始狀態</li>
+<li>Transition distribution $P(s’|s;a)$: 給定狀態 $s$ 與動作 $a$ 之後，某一個狀態 $s’$ 出現的機率<ul>
+<li>這個要特別注意。一般會以為我在某個時間點做了一個動作就一定會轉換到想要的狀態，然而實際上可能會有些意外發生。例如我在橋上往前走，除了前進之外可能也會不小心掉到橋下 (雖然我選擇的動作是前進)。這個 distribution 其實考慮了現實生活中的隨機性。</li>
+<li>這邊假設這個 distribution 在給定相同狀態與動作時都是固定的，不隨時間改變。</li>
+</ul>
+</li>
+<li>Deterministic reward function $R(s, a, s’)$: 在狀態 $s$ 時做了動作 $a$ 轉換到狀態 $s’$ 獲得的報酬 (reward)</li>
+<li>Discount factor $\gamma \in [0,1]$: 折扣係數<ul>
+<li>用來降低越晚得到的 reward 帶來的效果 =&gt; 越早拿到 reward 越好</li>
+</ul>
+</li>
+<li>Horizon $H \in \mathbb{N}$: 步數的上限</li>
+</ul>
+<p>因此總報酬 total reward 可以寫成以下式子：</p>
+<p>$$<br>R(s^{(0)}, a^{(0)}, s^{(1)}) + \gamma R(s^{(1)}, a^{(1)}, s^{(2)}) + … + \gamma^{H-1} R(s^{(H-1)}, a^{(H-1)}, s^{(H)})<br>$$</p>
+<h3 id="MDP-目標"><a href="#MDP-目標" class="headerlink" title="MDP 目標"></a>MDP 目標</h3><p>假設我們把策略 policy 用一個 function $\pi$ 表示，其中 $\pi$ 給定一個狀態可以告訴我們下一個動作該做甚麼。那它的預期總報酬 $V_\pi$ 可以寫成：</p>
+<p>$$<br>V_\pi = E_{s^{(0)},…,s^{(H)}}(\sum^H_{t=0}\gamma^t R(s^{(t)}, a^{(t)}, s^{(t+1)});\pi)<br>$$</p>
+<p>其中 $a^{(t)} = \pi(s^{(t)})$</p>
+<p>這邊使用期望值表示是因為執行一個動作並不一定會轉換到想要的 state，而是由一個 transition distribution $P$ 決定。所以必須要用期望值來代表有考慮到其他可能性。</p>
+<p>MDP 的目標就是要找到可以得到最大期望總報酬 (total reward) 的最佳的 policy $\pi^*$：</p>
+<p>$$<br>\pi^* = \arg \max_\pi V_\pi<br>$$</p>
+<h2 id="關於下一份筆記"><a href="#關於下一份筆記" class="headerlink" title="關於下一份筆記"></a>關於下一份筆記</h2><p>接下來會寫兩種找到最佳 policy 的基本作法：value iteration 與 policy iteration。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p>以上筆記為我看清華大學資訊工程學系的吳尚鴻教授的 CS565600 深度學習課程第 16 課，再轉化成我的理解記錄下來，有興趣的人可以直接看課程：</p>
+<p><a target="_blank" rel="noopener" href="https://nthu-datalab.github.io/ml/">https://nthu-datalab.github.io/ml/</a></p>
+</div><div id="disqus_thread"><script>var disqus_shortname = 'slmtsblog';
+var disqus_identifier = '2021/02/07/rl-note-1/';
+var disqus_title = 'Reinforcement Learning 筆記 (1) - 基本概念與目標';
+var disqus_url = 'http://www.slmt.tw/blog/2021/02/07/rl-note-1/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//#{theme.disqus}.disqus.com/count.js" async></script></div></div><div id="footer"><p>&copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021</p></div></div></body></html>

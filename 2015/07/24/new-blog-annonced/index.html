@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="zh-TW"><head><!-- Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-103835191-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-103835191-1');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SLMT's Blog | 新 Blog 開張!!</title><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"><link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/blog/css/style.css"><link rel="stylesheet" type="text/css" href="/blog/css/syntax-highlight.css"><script src="https://use.fontawesome.com/0bc11e7eba.js"></script><!-- Open Graph Protocol--><meta property="og:title" content="新 Blog 開張!!"><meta property="og:image" content="http://www.slmt.tw/blog/images/logo.png"><meta property="og:type" content="website"><meta property="og:url" content="/blog/2015/07/24/new-blog-annonced/"><meta property="og:site_name" content="SLMT's Blog"><meta property="og:locale" content="zh-TW"><meta property="og:description" content="這篇原先是為了我在 Jekyll 的部落格寫的，對於現在這個 blog 來說已經算是舊文囉！"><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/blog/rss.xml" title="SLMT's Blog" type="application/atom+xml">
+</head><body><div id="container"><div id="header"><h1 class="title">SLMT's Blog</h1><div class="pure-g navs"><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/.">All Posts</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/archives">Archive</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="https://www.slmt.tw/">About</a></div><div class="nav pure-u-1 pure-u-sm-1-4"><a href="/blog/rss.xml">RSS</a></div></div></div><div id="main"><h1 class="post-large-title">新 Blog 開張!!</h1><div class="post-meta"><div class="post-date"><i class="fa fa-calendar" aria-hidden="true"></i>2015/07/24</div><div class="post-cats"><i class="fa fa-folder-open" aria-hidden="true"></i><a class="post-cat" href="/blog/categories/building-blog/">Building Blog</a>/<a class="post-cat" href="/blog/categories/building-blog/jekyll/">Jekyll</a></div><div class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a class="post-tag" href="/blog/tags/blog/">#blog</a><a class="post-tag" href="/blog/tags/github-pages/">#github pages</a></div></div><div class="post-content"><p>這篇原先是為了我在 Jekyll 的部落格寫的，對於現在這個 blog 來說已經算是舊文囉！</p>
+<a id="more"></a>
+
+<p>這裏是我的新 blog</p>
+<p>對於一般來訪的人來說，應該只會覺得外觀有改變而已。但是事實上，連後端也改變很多！之前的 blog 是先在我個人的 VM 上裝上 <a target="_blank" rel="noopener" href="http://httpd.apache.org/">Apache HTTP Server</a>，然後再將他人撰寫的 <a target="_blank" rel="noopener" href="https://tw.wordpress.org/">WordPress</a> 丟在 server 上執行。不過其實我很快就發現這個做法的大問題。我個人可以很簡單地，使用 DoS 攻擊 (Denial of Service Attack)，就能夠讓我的 server 當機。</p>
+<p>因此從那時開始，我就一直在尋覓各種解決方法，或是替代方案。</p>
+<p>另外，WordPress 提供了蠻多功能，但是我個人其實不太需要這麼多功能。對於一個不會寫網頁的人來說，WordPress 確實是架設網站的一個很好選擇。不過對一個只想架設一個簡單 blog 的軟體工程師來說，WordPress 實在是太肥了點。</p>
+<p>同時租用一個 VM 也是要錢的 （每個月 10 鎂，約台幣 300），所以能有一個便宜，甚至不用錢的解決方案最好。</p>
+<p>幸好，實驗室學長 <a target="_blank" rel="noopener" href="http://shaokanp.me/">Marcus</a> 告訴我了另一個選擇。他說我可以使用 <a target="_blank" rel="noopener" href="http://jekyllrb.com/">Jekyll</a> 在 <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> 上架設 blog。</p>
+<p>最初我並沒有很認真地考慮，但是後來仔細一看之後，發現這是一個適合工程師，也很適合我的解決方案。</p>
+<p>基本上使用 Jekyll 不需要任何後台管理。撰寫 blog 文章主要是透過撰寫一份 Markdown 文件來進行，然後 Jekyll 會根據你事先寫好的模板將文件轉換成靜態網頁。最後只要將網頁上傳到一個網路空間即可。</p>
+<p>剛好 Github 有提供幫你 host 靜態網頁的功能，因此我就使用了 <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> 這個服務。唯一的缺點是，你的所有程式碼都會公開在 Github 上，只是我個人不覺得這是大問題就是了XD</p>
+<p>本 blog 原始碼位置： <a target="_blank" rel="noopener" href="https://github.com/SLMT/slmt.github.io">https://github.com/SLMT/slmt.github.io</a></p>
+</div><div id="disqus_thread"><script>var disqus_shortname = 'slmtsblog';
+var disqus_identifier = '2015/07/24/new-blog-annonced/';
+var disqus_title = '新 Blog 開張!!';
+var disqus_url = 'http://www.slmt.tw/blog/2015/07/24/new-blog-annonced/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//#{theme.disqus}.disqus.com/count.js" async></script></div></div><div id="footer"><p>&copy; Yu-shan Lin (SLMT) and SLMT's Blog, 2016-2021</p></div></div></body></html>
